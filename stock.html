@@ -22,7 +22,7 @@
             border-radius: 8px; 
             box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
             width: 100%; 
-            max-width: 700px; 
+            max-width: 800px; 
         }
         label { font-weight: bold; font-size: 14px; display: block; margin-top: 10px; }
         input, button { 
@@ -58,9 +58,10 @@
         
         <h3>Tambah Barang Baru</h3>
         <form id="stokForm" onsubmit="tambahBarang(event)">
-            <input type="text" id="kode" placeholder="Kode Barang" required>
-            <input type="text" id="nama" placeholder="Nama Barang" required>
-            <input type="text" id="kategori" placeholder="Kategori Barang" required>
+            <input type="text" id="kode" placeholder="Kode Barang (Contoh: BBO001)" required>
+            <input type="text" id="nama" placeholder="Nama Barang (Contoh: Bawang bombay)" required>
+            <input type="text" id="kategori" placeholder="Kategori Barang (Contoh: Bawang & Bumbu)" required>
+            <input type="text" id="satuan" placeholder="Satuan Barang (Contoh: gram, pcs, pack)" required>
             <button type="submit" id="simpanBtn">Simpan Barang</button>
         </form>
 
@@ -71,10 +72,11 @@
                     <th>Kode Barang</th>
                     <th>Nama Barang</th>
                     <th>Kategori Barang</th>
+                    <th>Satuan Barang</th>
                 </tr>
             </thead>
             <tbody id="tabelStok">
-                <tr><td colspan="3" style="text-align: center;">Memuat data...</td></tr>
+                <tr><td colspan="4" style="text-align: center;">Memuat data...</td></tr>
             </tbody>
         </table>
     </div>
@@ -84,7 +86,7 @@
             window.location.href = "index.html";
         }
 
-        const API_URL = "https://script.google.com/macros/s/AKfycbxfLmPjdIUrDr6Chp3uwni8JEfppWxApVYct5Fm12zd9PZ-dx1-6sKI1ZlCVHf_xJeY/exec";
+        const API_URL = "https://script.google.com/macros/s/AKfycbwkF85ZEmxJkl5NoJjqHnCOHe9TNCN6S5Cjv3FfXjgr4_O-5j4W1jWPhzTJhKrjX731/exec";
 
         function postData(payload) {
             return fetch(API_URL, {
@@ -97,14 +99,14 @@
 
         function loadStok() {
             const tbody = document.getElementById('tabelStok');
-            tbody.innerHTML = '<tr><td colspan="3" style="text-align: center;">Memuat data...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Memuat data...</td></tr>';
 
             postData({ action: "getStok" })
             .then(res => {
                 if(res.status === "success") {
                     tbody.innerHTML = "";
                     if (res.data.length === 0) {
-                        tbody.innerHTML = '<tr><td colspan="3" style="text-align: center;">Belum ada data barang.</td></tr>';
+                        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Belum ada data barang.</td></tr>';
                         return;
                     }
                     res.data.forEach(item => {
@@ -112,14 +114,15 @@
                             <td>${item.kode}</td>
                             <td>${item.nama}</td>
                             <td>${item.kategori || '-'}</td>
+                            <td>${item.satuan || '-'}</td>
                         </tr>`;
                     });
                 } else {
-                    tbody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: red;">${res.message}</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: red;">${res.message}</td></tr>`;
                 }
             })
             .catch(err => {
-                tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: red;">Gagal memuat data.</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: red;">Gagal memuat data.</td></tr>';
                 console.error("Load error:", err);
             });
         }
@@ -129,6 +132,7 @@
             const kode = document.getElementById('kode').value;
             const nama = document.getElementById('nama').value;
             const kategori = document.getElementById('kategori').value;
+            const satuan = document.getElementById('satuan').value;
             const btn = document.getElementById('simpanBtn');
 
             btn.innerText = "Menyimpan...";
@@ -138,7 +142,8 @@
                 action: "tambahStok", 
                 kode: kode, 
                 nama: nama, 
-                kategori: kategori 
+                kategori: kategori,
+                satuan: satuan
             })
             .then(res => {
                 btn.innerText = "Simpan Barang";
