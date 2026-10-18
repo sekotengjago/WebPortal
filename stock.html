@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard Stok - Aplikasi Pencatatan Stok</title>
+    <title>Database Master Barang</title>
     <style>
         * { box-sizing: border-box; }
         body { 
@@ -50,44 +50,41 @@
 
     <div class="card">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h2>Dashboard Stok Barang</h2>
+            <h2>Database Master Barang</h2>
             <button onclick="handleLogout()" style="background: #dc3545; width: auto; padding: 6px 15px; margin: 0;">Logout</button>
         </div>
         
         <hr style="margin: 15px 0;">
         
         <h3>Tambah Barang Baru</h3>
-        <form id="stokForm" onsubmit="tambahStok(event)">
+        <form id="stokForm" onsubmit="tambahBarang(event)">
             <input type="text" id="kode" placeholder="Kode Barang" required>
             <input type="text" id="nama" placeholder="Nama Barang" required>
-            <input type="number" id="jumlah" placeholder="Jumlah Stok" required>
-            <input type="text" id="keterangan" placeholder="Keterangan">
-            <button type="submit" id="simpanBtn">Simpan Stok</button>
+            <input type="text" id="kategori" placeholder="Kategori Barang" required>
+            <button type="submit" id="simpanBtn">Simpan Barang</button>
         </form>
 
-        <h3>Daftar Stok</h3>
+        <h3>Daftar Master Barang</h3>
         <table>
             <thead>
                 <tr>
-                    <th>Kode</th>
-                    <th>Nama</th>
-                    <th>Jumlah</th>
-                    <th>Keterangan</th>
+                    <th>Kode Barang</th>
+                    <th>Nama Barang</th>
+                    <th>Kategori Barang</th>
                 </tr>
             </thead>
             <tbody id="tabelStok">
-                <tr><td colspan="4" style="text-align: center;">Memuat data...</td></tr>
+                <tr><td colspan="3" style="text-align: center;">Memuat data...</td></tr>
             </tbody>
         </table>
     </div>
 
     <script>
-        // Pengecekan Keamanan Sesi (jika belum login, tendang kembali ke index.html)
         if (localStorage.getItem("isLoggedIn") !== "true") {
             window.location.href = "index.html";
         }
 
-        const API_URL = "https://script.google.com/macros/s/AKfycbwkF85ZEmxJkl5NoJjqHnCOHe9TNCN6S5Cjv3FfXjgr4_O-5j4W1jWPhzTJhKrjX731/exec";
+        const API_URL = "https://script.google.com/macros/s/AKfycbxfLmPjdIUrDr6Chp3uwni8JEfppWxApVYct5Fm12zd9PZ-dx1-6sKI1ZlCVHf_xJeY/exec";
 
         function postData(payload) {
             return fetch(API_URL, {
@@ -100,40 +97,38 @@
 
         function loadStok() {
             const tbody = document.getElementById('tabelStok');
-            tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Memuat data...</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="3" style="text-align: center;">Memuat data...</td></tr>';
 
             postData({ action: "getStok" })
             .then(res => {
                 if(res.status === "success") {
                     tbody.innerHTML = "";
                     if (res.data.length === 0) {
-                        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Belum ada data stok.</td></tr>';
+                        tbody.innerHTML = '<tr><td colspan="3" style="text-align: center;">Belum ada data barang.</td></tr>';
                         return;
                     }
                     res.data.forEach(item => {
                         tbody.innerHTML += `<tr>
                             <td>${item.kode}</td>
                             <td>${item.nama}</td>
-                            <td>${item.jumlah}</td>
-                            <td>${item.keterangan || '-'}</td>
+                            <td>${item.kategori || '-'}</td>
                         </tr>`;
                     });
                 } else {
-                    tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: red;">${res.message}</td></tr>`;
+                    tbody.innerHTML = `<tr><td colspan="3" style="text-align: center; color: red;">${res.message}</td></tr>`;
                 }
             })
             .catch(err => {
-                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: red;">Gagal memuat data.</td></tr>';
-                console.error("Load stok error:", err);
+                tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; color: red;">Gagal memuat data.</td></tr>';
+                console.error("Load error:", err);
             });
         }
 
-        function tambahStok(e) {
+        function tambahBarang(e) {
             e.preventDefault();
             const kode = document.getElementById('kode').value;
             const nama = document.getElementById('nama').value;
-            const jumlah = document.getElementById('jumlah').value;
-            const keterangan = document.getElementById('keterangan').value;
+            const kategori = document.getElementById('kategori').value;
             const btn = document.getElementById('simpanBtn');
 
             btn.innerText = "Menyimpan...";
@@ -143,14 +138,13 @@
                 action: "tambahStok", 
                 kode: kode, 
                 nama: nama, 
-                jumlah: jumlah, 
-                keterangan: keterangan 
+                kategori: kategori 
             })
             .then(res => {
-                btn.innerText = "Simpan Stok";
+                btn.innerText = "Simpan Barang";
                 btn.disabled = false;
                 if(res.status === "success") {
-                    alert("Berhasil menambah stok!");
+                    alert("Berhasil menambah barang!");
                     document.getElementById('stokForm').reset();
                     loadStok();
                 } else {
@@ -158,22 +152,19 @@
                 }
             })
             .catch(err => {
-                btn.innerText = "Simpan Stok";
+                btn.innerText = "Simpan Barang";
                 btn.disabled = false;
                 alert("Terjadi kesalahan koneksi saat menyimpan.");
-                console.error("Tambah stok error:", err);
+                console.error("Tambah error:", err);
             });
         }
 
         function handleLogout() {
-            // Hapus sesi login
             localStorage.removeItem("isLoggedIn");
             localStorage.removeItem("username");
-            // Kembali ke halaman utama (index.html)
             window.location.href = "index.html";
         }
 
-        // Jalankan pemuatan data stok saat halaman stock.html pertama kali dibuka
         window.onload = function() {
             loadStok();
         };
