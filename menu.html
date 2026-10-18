@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Utama - Aplikasi Stok</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f4f4f9; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
+        .btn-menu { display: block; width: 100%; padding: 12px; margin: 12px 0; background: #007BFF; color: white; border: none; border-radius: 4px; font-weight: bold; font-size: 16px; cursor: pointer; text-decoration: none; }
+        .btn-menu:hover { background: #0056b3; }
+        .btn-logout { background: #dc3545; }
+        .btn-logout:hover { background: #c82333; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <h2>Menu Utama</h2>
+        <p style="color: #666; margin-bottom: 20px;">Silakan pilih menu di bawah ini:</p>
+        
+        <a href="stock.html" class="btn-menu">📁 List SKU (Master Barang)</a>
+        <a href="stokMasuk.html" class="btn-menu" style="background: #28a745;">📥 Lembar Barang Masuk</a>
+        
+        <button onclick="handleLogout()" class="btn-menu btn-logout" style="margin-top: 30px;">Logout</button>
+    </div>
+
+    <script>
+        if (localStorage.getItem("isLoggedIn") !== "true") {
+            window.location.href = "index.html";
+        }
+
+        function handleLogout() {
+            localStorage.removeItem("isLoggedIn");
+            localStorage.removeItem("username");
+            window.location.href = "index.html";
+        }
+    </script>
+</body>
+</html>
