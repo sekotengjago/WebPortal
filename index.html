@@ -6,39 +6,11 @@
     <title>Login - Aplikasi Pencatatan Stok</title>
     <style>
         * { box-sizing: border-box; }
-        body { 
-            font-family: Arial, sans-serif; 
-            background: #f4f4f9; 
-            margin: 0; 
-            padding: 20px; 
-            display: flex; 
-            justify-content: center; 
-            align-items: center; 
-            min-height: 100vh; 
-        }
-        .card { 
-            background: white; 
-            padding: 30px; 
-            border-radius: 8px; 
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
-            width: 100%; 
-            max-width: 400px; 
-        }
+        body { font-family: Arial, sans-serif; background: #f4f4f9; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
         label { font-weight: bold; font-size: 14px; display: block; margin-top: 10px; }
-        input, button { 
-            width: 100%; 
-            padding: 10px; 
-            margin: 8px 0 16px 0; 
-            border: 1px solid #ccc; 
-            border-radius: 4px; 
-        }
-        button { 
-            background: #007BFF; 
-            color: white; 
-            border: none; 
-            cursor: pointer; 
-            font-weight: bold; 
-        }
+        input, button { width: 100%; padding: 10px; margin: 8px 0 16px 0; border: 1px solid #ccc; border-radius: 4px; }
+        button { background: #007BFF; color: white; border: none; cursor: pointer; font-weight: bold; }
         button:hover { background: #0056b3; }
         button:disabled { background: #cccccc; cursor: not-allowed; }
     </style>
@@ -57,9 +29,8 @@
         <p id="loginMsg" style="color: red; font-size: 14px; text-align: center;"></p>
     </div>
 
+    <script src="config.js"></script>
     <script>
-        const API_URL = "https://script.google.com/macros/s/AKfycbxEJyfHkl5wHtqI6KRSx9aSkyRdgCZSDRZFHcSa6uGR2Yq1YV-24y-s603FZN_GhlHG/exec";
-
         function handleLogin(e) {
             e.preventDefault();
             const username = document.getElementById('username').value;
@@ -82,12 +53,9 @@
                 btn.innerText = "Masuk";
                 btn.disabled = false;
                 if(res.status === "success") {
-                    // Simpan status sesi login sederhana ke localStorage
                     localStorage.setItem("isLoggedIn", "true");
                     localStorage.setItem("username", username);
-                    
-                    // Alihkan ke halaman stock.html
-                    window.location.href = "stock.html";
+                    window.location.href = "menu.html";
                 } else {
                     msg.innerText = res.message;
                 }
