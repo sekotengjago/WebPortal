@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lembar Barang Masuk</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: Arial, sans-serif; background: #f4f4f9; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        .card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 100%; max-width: 800px; }
+        label { font-weight: bold; font-size: 14px; display: block; margin-top: 10px; }
+        input, select, button { width: 100%; padding: 10px; margin: 8px 0 16px 0; border: 1px solid #ccc; border-radius: 4px; }
+        button { background: #28a745; color: white; border: none; cursor: pointer; font-weight: bold; }
+        button:hover { background: #218838; }
+        button:disabled { background: #cccccc; cursor: not-allowed; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; font-size: 14px; }
+        th { background: #f2f2f2; }
+        .nav-btn { background: #6c757d; width: auto; padding: 6px 15px; margin: 0; text-decoration: none; display: inline-block; color: white; border-radius: 4px; font-size: 14px;}
+        .nav-btn:hover { background: #5a6268; }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>Lembar Barang Masuk</h2>
+            <a href="menu.html" class="nav-btn">⬅ Kembali ke Menu</a>
+        </div>
+        
+        <hr style="margin: 15px 0;">
+        
+        <h3>Catat Barang Masuk</h3>
+        <form id="barangMasukForm" onsubmit="tambahBarangMasuk(event)">
+            <label>Tanggal</label>
+            <input type="date" id="tanggal" required>
+            
+            <label>Pilih Barang (SKU)</label>
+            <select id="selectKode" required onchange="isiOtomatisNama()">
+                <option value="">-- Pilih Barang --</option>
+            </select>
+            
+            <input type="hidden" id="namaBarang">
+            
+            <label>Jumlah Masuk</label>
+            <input type="number" id="jumlahMasuk" placeholder="Masukkan jumlah" required>
+            
+            <label>Keterangan / Supplier</label>
+            <input type="text" id="keterangan" placeholder="Contoh: Dari Supplier Utama">
+            
+            <button type="submit" id="simpanBtn">Simpan Barang Masuk</button>
+        </form>
+
+        <h3>Riwayat Barang Masuk</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Tanggal</th>
+                    <th>Kode</th>
+                    <th>Nama Barang</th>
+                    <th>Jumlah</th>
+                    <th>Keterangan</th>
+                </tr>
+            </thead>
+            <tbody id="tabelBarangMasuk">
+                <tr><td colspan="5" style="text-align: center;">Memuat data...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        if (localStorage.getItem("isLoggedIn") !== "true") {
+            window.location.href = "index.html";
+        }
+
+        let listMasterBarang = [];
+
+        function postData(payload) {
+            return fetch(API_URL, {
+                method: "POST",
+                mode: "cors",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify(payload)
+            }).then(res => res.json());
+        }
+
+        document.getElementById('tanggal').valueAsDate = new Date();
+
+        function loadDropdownDanRiwayat() {
+            postData({ action: "getStok" })
+            .then(res => {
+                if(res.status === "success") {
+                    listMasterBarang = res.data;
+                    const select = document.getElementById('selectKode');
+                    select.innerHTML = '<option value="">-- Pilih Barang --</option>';
+                    res.data.forEach(item => {
+                        select.innerHTML += `<option value="${item.kode}">${item.kode} - ${item.nama} (${item.satuan || '-'})</option>`;
+                    });
+                }
+            });
+
+            loadRiwayatMasuk();
+        }
+
+        function isiOtomatisNama() {
+            const kodePilihan = document.getElementById('selectKode').value;
+            const barang = listMasterBarang.find(b => b.kode === kodePilihan);
+            if (barang) {
+                document.getElementById('namaBarang').value = barang.nama;
+            } else {
+                document.getElementById('namaBarang').value = "";
+            }
+        }
+
+        function loadRiwayatMasuk() {
+            const tbody = document.getElementById('tabelBarangMasuk');
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Memuat data...</td></tr>';
+
+            postData({ action: "getBarangMasuk" })
+            .then(res => {
+                if(res.status === "success") {
+                    tbody.innerHTML = "";
+                    if (res.data.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Belum ada riwayat barang masuk.</td></tr>';
+                        return;
+                    }
+                    res.data.forEach(item => {
+                        tbody.innerHTML += `<tr>
+                            <td>${item.tanggal}</td>
+                            <td>${item.kode}</td>
+                            <td>${item.nama}</td>
+                            <td>${item.jumlah}</td>
+                            <td>${item.keterangan || '-'}</td>
+                        </tr>`;
+                    });
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: red;">${res.message}</td></tr>`;
+                }
+            })
+            .catch(err => {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: red;">Gagal memuat riwayat.</td></tr>';
+                console.error("Load riwayat error:", err);
+            });
+        }
+
+        function tambahBarangMasuk(e) {
+            e.preventDefault();
+            const tanggal = document.getElementById('tanggal').value;
+            const kode = document.getElementById('selectKode').value;
+            const nama = document.getElementById('namaBarang').value;
+            const jumlah = document.getElementById('jumlahMasuk').value;
+            const keterangan = document.getElementById('keterangan').value;
+            const btn = document.getElementById('simpanBtn');
+
+            btn.innerText = "Menyimpan...";
+            btn.disabled = true;
+
+            postData({ 
+                action: "tambahBarangMasuk", 
+                tanggal: tanggal,
+                kode: kode, 
+                nama: nama, 
+                jumlah: jumlah, 
+                keterangan: keterangan 
+            })
+            .then(res => {
+                btn.innerText = "Simpan Barang Masuk";
+                btn.disabled = false;
+                if(res.status === "success") {
+                    alert("Berhasil mencatat barang masuk!");
+                    document.getElementById('barangMasukForm').reset();
+                    document.getElementById('tanggal').valueAsDate = new Date();
+                    loadRiwayatMasuk();
+                } else {
+                    alert("Gagal menyimpan data: " + res.message);
+                }
+            })
+            .catch(err => {
+                btn.innerText = "Simpan Barang Masuk";
+                btn.disabled = false;
+                alert("Terjadi kesalahan koneksi saat menyimpan.");
+                console.error("Tambah barang masuk error:", err);
+            });
+        }
+
+        window.onload = function() {
+            loadDropdownDanRiwayat();
+        };
+    </script>
+</body>
+</html>
