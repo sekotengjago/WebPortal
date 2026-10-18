@@ -5,12 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aplikasi Pencatatan Stok</title>
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f4f9; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; height: 100vh; }
-        .card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        * { box-sizing: border-box; }
+        body { 
+            font-family: Arial, sans-serif; 
+            background: #f4f4f9; 
+            margin: 0; 
+            padding: 20px; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+        }
+        .card { 
+            background: white; 
+            padding: 30px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1); 
+            width: 100%; 
+            max-width: 400px; 
+        }
         .hidden { display: none !important; }
-        input, button { width: 100%; padding: 10px; margin: 8px 0 16px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
-        button { background: #007BFF; color: white; border: none; cursor: pointer; }
+        label { font-weight: bold; font-size: 14px; display: block; margin-top: 10px; }
+        input, button { 
+            width: 100%; 
+            padding: 10px; 
+            margin: 8px 0 16px 0; 
+            border: 1px solid #ccc; 
+            border-radius: 4px; 
+        }
+        button { 
+            background: #007BFF; 
+            color: white; 
+            border: none; 
+            cursor: pointer; 
+            font-weight: bold; 
+        }
         button:hover { background: #0056b3; }
+        button:disabled { background: #cccccc; cursor: not-allowed; }
         table { width: 100%; border-collapse: collapse; margin-top: 15px; }
         th, td { border: 1px solid #ddd; padding: 8px; text-align: left; font-size: 14px; }
         th { background: #f2f2f2; }
@@ -23,19 +54,20 @@
         <h2>Login Stok App</h2>
         <form id="loginForm" onsubmit="handleLogin(event)">
             <label>Username</label>
-            <input type="text" id="username" required>
+            <input type="text" id="username" required autocomplete="username">
             <label>Password</label>
-            <input type="password" id="password" required>
+            <input type="password" id="password" required autocomplete="current-password">
             <button type="submit" id="loginBtn">Masuk</button>
         </form>
-        <p id="loginMsg" style="color: red; font-size: 14px;"></p>
+        <p id="loginMsg" style="color: red; font-size: 14px; text-align: center;"></p>
     </div>
 
     <!-- HALAMAN DASHBOARD -->
     <div id="dashboardPage" class="card hidden" style="max-width: 700px;">
-        <h2>Dashboard Stok Barang</h2>
-        <button onclick="handleLogout()" style="background: #dc3545; width: auto; padding: 5px 15px; float: right;">Logout</button>
-        <div style="clear: both;"></div>
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <h2>Dashboard Stok Barang</h2>
+            <button onclick="handleLogout()" style="background: #dc3545; width: auto; padding: 6px 15px; margin: 0;">Logout</button>
+        </div>
         
         <hr style="margin: 15px 0;">
         
@@ -45,7 +77,7 @@
             <input type="text" id="nama" placeholder="Nama Barang" required>
             <input type="number" id="jumlah" placeholder="Jumlah Stok" required>
             <input type="text" id="keterangan" placeholder="Keterangan">
-            <button type="submit">Simpan Stok</button>
+            <button type="submit" id="simpanBtn">Simpan Stok</button>
         </form>
 
         <h3>Daftar Stok</h3>
@@ -59,29 +91,38 @@
                 </tr>
             </thead>
             <tbody id="tabelStok">
-                <!-- Data akan dimuat lewat JavaScript -->
+                <tr><td colspan="4" style="text-align: center;">Memuat data...</td></tr>
             </tbody>
         </table>
     </div>
 
     <script>
-        // Ganti URL di bawah dengan URL Web App dari Google Apps Script Anda
-        const API_URL = "https://script.google.com/macros/s/AKfycbwkF85ZEmxJkl5NoJjqHnCOHe9TNCN6S5Cjv3FfXjgr4_O-5j4W1jWPhzTJhKrjX731/exec";
+        const API_URL = "https://script.google.com/macros/s/AKfycbwehTGrQtRs-DdIg2dkgU1YR1ATBh5tB5vay-JhWOiNCrLN-H1qmiP8bdM-pP7KfLop/exec";
+
+        // Fungsi pembantu untuk melakukan request POST ke Google Apps Script tanpa masalah CORS
+        function postData(payload) {
+            return fetch(API_URL, {
+                method: "POST",
+                mode: "cors",
+                headers: {
+                    "Content-Type": "text/plain;charset=utf-8"
+                },
+                body: JSON.stringify(payload)
+            }).then(res => res.json());
+        }
 
         function handleLogin(e) {
             e.preventDefault();
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
             const btn = document.getElementById('loginBtn');
+            const msg = document.getElementById('loginMsg');
             
             btn.innerText = "Memproses...";
             btn.disabled = true;
+            msg.innerText = "";
 
-            fetch(API_URL, {
-                method: "POST",
-                body: JSON.stringify({ action: "login", username, password })
-            })
-            .then(res => res.json())
+            postData({ action: "login", username: username, password: password })
             .then(res => {
                 btn.innerText = "Masuk";
                 btn.disabled = false;
@@ -90,36 +131,44 @@
                     document.getElementById('dashboardPage').classList.remove('hidden');
                     loadStok();
                 } else {
-                    document.getElementById('loginMsg').innerText = res.message;
+                    msg.innerText = res.message;
                 }
             })
             .catch(err => {
                 btn.innerText = "Masuk";
                 btn.disabled = false;
-                document.getElementById('loginMsg').innerText = "Terjadi kesalahan koneksi.";
-                console.error(err);
+                msg.innerText = "Terjadi kesalahan koneksi.";
+                console.error("Login error:", err);
             });
         }
 
         function loadStok() {
-            fetch(API_URL, {
-                method: "POST",
-                body: JSON.stringify({ action: "getStok" })
-            })
-            .then(res => res.json())
+            const tbody = document.getElementById('tabelStok');
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Memuat data...</td></tr>';
+
+            postData({ action: "getStok" })
             .then(res => {
                 if(res.status === "success") {
-                    let tbody = document.getElementById('tabelStok');
                     tbody.innerHTML = "";
+                    if (res.data.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Belum ada data stok.</td></tr>';
+                        return;
+                    }
                     res.data.forEach(item => {
                         tbody.innerHTML += `<tr>
                             <td>${item.kode}</td>
                             <td>${item.nama}</td>
                             <td>${item.jumlah}</td>
-                            <td>${item.keterangan}</td>
+                            <td>${item.keterangan || '-'}</td>
                         </tr>`;
                     });
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: red;">${res.message}</td></tr>`;
                 }
+            })
+            .catch(err => {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: red;">Gagal memuat data.</td></tr>';
+                console.error("Load stok error:", err);
             });
         }
 
@@ -129,20 +178,34 @@
             const nama = document.getElementById('nama').value;
             const jumlah = document.getElementById('jumlah').value;
             const keterangan = document.getElementById('keterangan').value;
+            const btn = document.getElementById('simpanBtn');
 
-            fetch(API_URL, {
-                method: "POST",
-                body: JSON.stringify({ action: "tambahStok", kode, nama, jumlah, keterangan })
+            btn.innerText = "Menyimpan...";
+            btn.disabled = true;
+
+            postData({ 
+                action: "tambahStok", 
+                kode: kode, 
+                nama: nama, 
+                jumlah: jumlah, 
+                keterangan: keterangan 
             })
-            .then(res => res.json())
             .then(res => {
+                btn.innerText = "Simpan Stok";
+                btn.disabled = false;
                 if(res.status === "success") {
                     alert("Berhasil menambah stok!");
                     document.getElementById('stokForm').reset();
                     loadStok();
                 } else {
-                    alert("Gagal menyimpan data.");
+                    alert("Gagal menyimpan data: " + res.message);
                 }
+            })
+            .catch(err => {
+                btn.innerText = "Simpan Stok";
+                btn.disabled = false;
+                alert("Terjadi kesalahan koneksi saat menyimpan.");
+                console.error("Tambah stok error:", err);
             });
         }
 
