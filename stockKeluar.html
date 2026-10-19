@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Lembar Barang Keluar</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: #0f0c1b; color: #ffffff; min-height: 100vh; padding: 16px; overflow-x: hidden; position: relative; }
+        
+        .bg-glow-1 { position: absolute; width: 300px; height: 300px; background: radial-gradient(circle, rgba(244,63,94,0.2) 0%, rgba(0,0,0,0) 70%); top: -50px; right: -50px; border-radius: 50%; pointer-events: none; }
+
+        .app-container { width: 100%; max-width: 600px; margin: 0 auto; z-index: 1; position: relative; }
+
+        /* Header Navigation */
+        .top-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .page-title { font-size: 20px; font-weight: 700; color: #fff; }
+        .nav-btn { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: #cbd5e1; padding: 8px 14px; border-radius: 12px; text-decoration: none; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
+        .nav-btn:active { background: rgba(255,255,255,0.18); }
+
+        /* Form Card */
+        .card { background: rgba(26, 21, 48, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); padding: 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35); margin-bottom: 24px; }
+        .section-title { font-size: 16px; font-weight: 700; color: #f43f5e; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+
+        .form-group { margin-bottom: 14px; }
+        label { font-size: 12px; font-weight: 600; color: #a5a6f6; display: block; margin-bottom: 6px; }
+        
+        input, select { width: 100%; padding: 12px 14px; background: #130f26; border: 1px solid #2d284f; border-radius: 12px; color: #fff; font-size: 14px; outline: none; transition: border-color 0.2s; }
+        input:focus, select:focus { border-color: #f43f5e; }
+        select option { background: #130f26; color: #fff; }
+
+        .btn-submit { width: 100%; padding: 14px; margin-top: 10px; background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%); color: #fff; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 6px 18px rgba(244, 63, 94, 0.3); display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        /* Responsive Table Wrapper */
+        .table-responsive { width: 100%; overflow-x: auto; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); }
+        table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
+        th { background: #181335; color: #a5a6f6; padding: 12px 10px; font-weight: 600; white-space: nowrap; }
+        td { padding: 12px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); color: #e2e8f0; white-space: nowrap; }
+        tr:last-child td { border-bottom: none; }
+        tr:nth-child(even) { background: rgba(255,255,255,0.02); }
+
+        /* Custom Dark Alert Modal */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-box { background: #1a1530; border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; width: 85%; max-width: 320px; padding: 24px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.5); transform: scale(0.8); transition: transform 0.2s ease; }
+        .modal-overlay.active .modal-box { transform: scale(1); }
+        .modal-icon { font-size: 38px; color: #f43f5e; margin-bottom: 12px; }
+        .modal-text { font-size: 14px; color: #fff; margin-bottom: 20px; line-height: 1.4; }
+        .modal-btn { width: 100%; padding: 10px; background: #f43f5e; color: #fff; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow-1"></div>
+
+    <div class="app-container">
+        <!-- Top Navigation -->
+        <div class="top-nav">
+            <h2 class="page-title">Barang Keluar</h2>
+            <a href="menu.html" class="nav-btn"><i class="fa-solid fa-arrow-left"></i> Menu</a>
+        </div>
+        
+        <!-- Form Input -->
+        <div class="card">
+            <div class="section-title"><i class="fa-solid fa-pen-to-square"></i> Catat Barang Keluar</div>
+            <form id="barangKeluarForm" onsubmit="tambahBarangKeluar(event)">
+                <div class="form-group">
+                    <label for="tanggal">Tanggal</label>
+                    <input type="date" id="tanggal" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="selectKode">Pilih Barang (SKU)</label>
+                    <select id="selectKode" required onchange="isiOtomatisNama()">
+                        <option value="">-- Pilih Barang --</option>
+                    </select>
+                </div>
+                
+                <input type="hidden" id="namaBarang">
+                
+                <div class="form-group">
+                    <label for="jumlahKeluar">Jumlah Keluar</label>
+                    <input type="number" id="jumlahKeluar" placeholder="Masukkan jumlah" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="keterangan">Keterangan</label>
+                    <input type="text" id="keterangan" placeholder="Contoh: Terjual / Ke Cabang Lain">
+                </div>
+                
+                <button type="submit" id="simpanBtn" class="btn-submit">
+                    <i class="fa-solid fa-floppy-disk"></i> Simpan Barang Keluar
+                </button>
+            </form>
+        </div>
+
+        <!-- Tabel Riwayat -->
+        <div class="card">
+            <div class="section-title"><i class="fa-solid fa-clock-rotate-left"></i> Riwayat Barang Keluar</div>
+            <div class="table-responsive">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Tanggal</th>
+                            <th>Kode Barang</th>
+                            <th>Nama Barang</th>
+                            <th>Jumlah Keluar</th>
+                            <th>Keterangan</th>
+                        </tr>
+                    </thead>
+                    <tbody id="tabelBarangKeluar">
+                        <tr><td colspan="5" style="text-align: center;">Memuat data...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Alert Kustom -->
+    <div class="modal-overlay" id="customAlertModal">
+        <div class="modal-box">
+            <div class="modal-icon" id="modalIcon"><i class="fa-solid fa-circle-check"></i></div>
+            <div class="modal-text" id="modalMessage">Pesan notifikasi</div>
+            <button class="modal-btn" onclick="closeCustomAlert()">OK</button>
+        </div>
+    </div>
+
+    <script src="config.js"></script>
+    <script>
+        if (localStorage.getItem("isLoggedIn") !== "true") {
+            window.location.href = "index.html";
+        }
+
+        let listMasterBarang = [];
+
+        function showCustomAlert(msg, isSuccess = true) {
+            const modal = document.getElementById('customAlertModal');
+            const icon = document.getElementById('modalIcon');
+            const text = document.getElementById('modalMessage');
+
+            text.innerText = msg;
+            if(isSuccess) {
+                icon.innerHTML = '<i class="fa-solid fa-circle-check" style="color: #f43f5e;"></i>';
+            } else {
+                icon.innerHTML = '<i class="fa-solid fa-circle-xmark" style="color: #f43f5e;"></i>';
+            }
+            modal.classList.add('active');
+        }
+
+        function closeCustomAlert() {
+            document.getElementById('customAlertModal').classList.remove('active');
+        }
+
+        function postData(payload) {
+            return fetch(API_URL, {
+                method: "POST",
+                mode: "cors",
+                headers: { "Content-Type": "text/plain;charset=utf-8" },
+                body: JSON.stringify(payload)
+            }).then(res => res.json());
+        }
+
+        document.getElementById('tanggal').valueAsDate = new Date();
+
+        function loadDropdownDanRiwayat() {
+            postData({ action: "getStok" })
+            .then(res => {
+                if(res.status === "success") {
+                    listMasterBarang = res.data;
+                    const select = document.getElementById('selectKode');
+                    select.innerHTML = '<option value="">-- Pilih Barang --</option>';
+                    res.data.forEach(item => {
+                        select.innerHTML += `<option value="${item.kode}">${item.kode} - ${item.nama} (${item.satuan || '-'})</option>`;
+                    });
+                }
+            });
+
+            loadRiwayatKeluar();
+        }
+
+        function isiOtomatisNama() {
+            const kodePilihan = document.getElementById('selectKode').value;
+            const barang = listMasterBarang.find(b => b.kode === kodePilihan);
+            if (barang) {
+                document.getElementById('namaBarang').value = barang.nama;
+            } else {
+                document.getElementById('namaBarang').value = "";
+            }
+        }
+
+        function loadRiwayatKeluar() {
+            const tbody = document.getElementById('tabelBarangKeluar');
+            tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Memuat data...</td></tr>';
+
+            postData({ action: "getBarangKeluar" })
+            .then(res => {
+                if(res.status === "success") {
+                    tbody.innerHTML = "";
+                    if (res.data.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="5" style="text-align: center;">Belum ada riwayat barang keluar.</td></tr>';
+                        return;
+                    }
+                    res.data.forEach(item => {
+                        tbody.innerHTML += `<tr>
+                            <td>${item.tanggal}</td>
+                            <td>${item.kode}</td>
+                            <td>${item.nama}</td>
+                            <td>${item.jumlah}</td>
+                            <td>${item.keterangan || '-'}</td>
+                        </tr>`;
+                    });
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; color: #f43f5e;">${res.message}</td></tr>`;
+                }
+            })
+            .catch(err => {
+                tbody.innerHTML = '<tr><td colspan="5" style="text-align: center; color: #f43f5e;">Gagal memuat riwayat.</td></tr>';
+                console.error("Load riwayat keluar error:", err);
+            });
+        }
+
+        function tambahBarangKeluar(e) {
+            e.preventDefault();
+            const tanggal = document.getElementById('tanggal').value;
+            const kode = document.getElementById('selectKode').value;
+            const nama = document.getElementById('namaBarang').value;
+            const jumlah = document.getElementById('jumlahKeluar').value;
+            const keterangan = document.getElementById('keterangan').value;
+            const btn = document.getElementById('simpanBtn');
+
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...';
+            btn.disabled = true;
+
+            postData({ 
+                action: "tambahBarangKeluar", 
+                tanggal: tanggal,
+                kode: kode, 
+                nama: nama, 
+                jumlah: jumlah, 
+                keterangan: keterangan 
+            })
+            .then(res => {
+                btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Simpan Barang Keluar';
+                btn.disabled = false;
+                if(res.status === "success") {
+                    showCustomAlert("Berhasil mencatat barang keluar!", true);
+                    document.getElementById('barangKeluarForm').reset();
+                    document.getElementById('tanggal').valueAsDate = new Date();
+                    loadRiwayatKeluar();
+                } else {
+                    showCustomAlert("Gagal menyimpan data: " + res.message, false);
+                }
+            })
+            .catch(err => {
+                btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Simpan Barang Keluar';
+                btn.disabled = false;
+                showCustomAlert("Terjadi kesalahan koneksi saat menyimpan.", false);
+                console.error("Tambah barang keluar error:", err);
+            });
+        }
+
+        window.onload = function() {
+            loadDropdownDanRiwayat();
+        };
+    </script>
+</body>
+</html>
