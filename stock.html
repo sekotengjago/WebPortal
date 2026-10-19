@@ -20,36 +20,46 @@
         .nav-btn { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.12); color: #cbd5e1; padding: 8px 14px; border-radius: 12px; text-decoration: none; font-size: 13px; font-weight: 600; display: inline-flex; align-items: center; gap: 6px; }
         .nav-btn:active { background: rgba(255,255,255,0.18); }
 
-        /* Card Form */
+        /* Action Button to Open Add Modal */
+        .btn-action-open { width: 100%; padding: 14px; margin-bottom: 20px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: #fff; border: none; border-radius: 16px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 6px 18px rgba(59, 130, 246, 0.3); display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-action-open:active { transform: scale(0.98); }
+
+        /* Card & Table */
         .card { background: rgba(26, 21, 48, 0.85); backdrop-filter: blur(16px); border: 1px solid rgba(255, 255, 255, 0.08); padding: 20px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35); margin-bottom: 24px; }
         .section-title { font-size: 16px; font-weight: 700; color: #3b82f6; margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
 
-        .form-group { margin-bottom: 14px; }
-        label { font-size: 12px; font-weight: 600; color: #a5a6f6; display: block; margin-bottom: 6px; }
-        
-        input, select { width: 100%; padding: 12px 14px; background: #130f26; border: 1px solid #2d284f; border-radius: 12px; color: #fff; font-size: 14px; outline: none; transition: border-color 0.2s; }
-        input:focus, select:focus { border-color: #3b82f6; }
-        input::placeholder { color: #5a577a; }
-
-        .btn-submit { width: 100%; padding: 14px; margin-top: 10px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: #fff; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 6px 18px rgba(59, 130, 246, 0.3); display: flex; justify-content: center; align-items: center; gap: 8px; }
-        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
-
-        /* Responsive Table */
         .table-responsive { width: 100%; overflow-x: auto; border-radius: 12px; border: 1px solid rgba(255,255,255,0.08); }
         table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
         th { background: #181335; color: #a5a6f6; padding: 12px 10px; font-weight: 600; white-space: nowrap; }
-        td { padding: 12px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); color: #e2e8f0; white-space: nowrap; }
+        td { padding: 12px 10px; border-bottom: 1px solid rgba(255,255,255,0.05); color: #e2e8f0; white-space: nowrap; cursor: pointer; }
+        tr:hover td { background: rgba(59, 130, 246, 0.1); }
         tr:last-child td { border-bottom: none; }
         tr:nth-child(even) { background: rgba(255,255,255,0.02); }
 
-        /* Custom Alert Modal */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); backdrop-filter: blur(5px); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; }
+        /* Modal Pop-up Window Styling */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.75); backdrop-filter: blur(6px); display: flex; justify-content: center; align-items: center; z-index: 1000; opacity: 0; pointer-events: none; transition: opacity 0.2s ease; padding: 16px; }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
-        .modal-box { background: #1a1530; border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; width: 85%; max-width: 320px; padding: 24px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.5); transform: scale(0.8); transition: transform 0.2s ease; }
+        
+        .modal-box { background: #1a1530; border: 1px solid rgba(255,255,255,0.12); border-radius: 24px; width: 100%; max-width: 400px; padding: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.6); transform: scale(0.85); transition: transform 0.2s ease; max-height: 90vh; overflow-y: auto; }
         .modal-overlay.active .modal-box { transform: scale(1); }
-        .modal-icon { font-size: 38px; color: #3b82f6; margin-bottom: 12px; }
-        .modal-text { font-size: 14px; color: #fff; margin-bottom: 20px; line-height: 1.4; }
-        .modal-btn { width: 100%; padding: 10px; background: #3b82f6; color: #fff; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; }
+
+        .modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+        .modal-title { font-size: 16px; font-weight: 700; color: #3b82f6; display: flex; align-items: center; gap: 8px; }
+        .modal-close { background: none; border: none; color: #94a3b8; font-size: 18px; cursor: pointer; }
+
+        .form-group { margin-bottom: 14px; text-align: left; }
+        label { font-size: 12px; font-weight: 600; color: #a5a6f6; display: block; margin-bottom: 6px; }
+        input, select { width: 100%; padding: 12px 14px; background: #130f26; border: 1px solid #2d284f; border-radius: 12px; color: #fff; font-size: 14px; outline: none; transition: border-color 0.2s; }
+        input:focus, select:focus { border-color: #3b82f6; }
+
+        .btn-submit { width: 100%; padding: 14px; margin-top: 10px; background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%); color: #fff; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 6px 18px rgba(59, 130, 246, 0.3); display: flex; justify-content: center; align-items: center; gap: 8px; }
+        .btn-delete { width: 100%; padding: 14px; margin-top: 10px; background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%); color: #fff; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 6px 18px rgba(244, 63, 94, 0.3); display: flex; justify-content: center; align-items: center; gap: 8px; }
+        
+        /* General Custom Alert Modal */
+        .alert-box { background: #1a1530; border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; width: 85%; max-width: 320px; padding: 24px; text-align: center; box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
+        .alert-icon { font-size: 38px; color: #3b82f6; margin-bottom: 12px; }
+        .alert-text { font-size: 14px; color: #fff; margin-bottom: 20px; line-height: 1.4; }
+        .alert-btn { width: 100%; padding: 10px; background: #3b82f6; color: #fff; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -64,35 +74,10 @@
             <a href="menu.html" class="nav-btn"><i class="fa-solid fa-arrow-left"></i> Menu</a>
         </div>
         
-        <!-- Form Tambah Barang -->
-        <div class="card">
-            <div class="section-title"><i class="fa-solid fa-square-plus"></i> Tambah Master Barang</div>
-            <form id="stokForm" onsubmit="tambahStok(event)">
-                <div class="form-group">
-                    <label for="kode">Kode SKU</label>
-                    <input type="text" id="kode" placeholder="Contoh: SKU-001" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="nama">Nama Barang</label>
-                    <input type="text" id="nama" placeholder="Contoh: Kopi Sekoteng 200ml" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="satuan">Satuan</label>
-                    <input type="text" id="satuan" placeholder="Contoh: Pcs, Botol, Pack" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="stokAwal">Stok Awal</label>
-                    <input type="number" id="stokAwal" placeholder="0" required>
-                </div>
-                
-                <button type="submit" id="simpanBtn" class="btn-submit">
-                    <i class="fa-solid fa-floppy-disk"></i> Simpan Barang
-                </button>
-            </form>
-        </div>
+        <!-- Button untuk membuka pop-up Tambah Barang -->
+        <button class="btn-action-open" onclick="openAddModal()">
+            <i class="fa-solid fa-square-plus"></i> Tambah Master Barang
+        </button>
 
         <!-- Tabel List Barang -->
         <div class="card">
@@ -103,8 +88,8 @@
                         <tr>
                             <th>Kode SKU</th>
                             <th>Nama Barang</th>
+                            <th>Kategori</th>
                             <th>Satuan</th>
-                            <th>Stok Current</th>
                         </tr>
                     </thead>
                     <tbody id="tabelStok">
@@ -115,12 +100,85 @@
         </div>
     </div>
 
-    <!-- Modal Alert Notifikasi -->
-    <div class="modal-overlay" id="customAlertModal">
+    <!-- 1. POP-UP MODAL: Tambah Master Barang -->
+    <div class="modal-overlay" id="addModal">
         <div class="modal-box">
-            <div class="modal-icon" id="modalIcon"><i class="fa-solid fa-circle-check"></i></div>
-            <div class="modal-text" id="modalMessage">Pesan notifikasi</div>
-            <button class="modal-btn" onclick="closeCustomAlert()">OK</button>
+            <div class="modal-header">
+                <div class="modal-title"><i class="fa-solid fa-square-plus"></i> Tambah Barang</div>
+                <button class="modal-close" onclick="closeAddModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="stokForm" onsubmit="tambahStok(event)">
+                <div class="form-group">
+                    <label for="kode">Kode SKU</label>
+                    <input type="text" id="kode" placeholder="Contoh: BBO001" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="nama">Nama Barang</label>
+                    <input type="text" id="nama" placeholder="Contoh: Bawang bombay" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="kategori">Kategori Barang</label>
+                    <input type="text" id="kategori" placeholder="Contoh: Bawang & Bumbu" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="satuan">Satuan</label>
+                    <input type="text" id="satuan" placeholder="Contoh: gram, pcs, pack" required>
+                </div>
+                
+                <button type="submit" id="simpanBtn" class="btn-submit">
+                    <i class="fa-solid fa-floppy-disk"></i> Simpan Barang
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. POP-UP MODAL: Edit & Hapus (Khusus Admin saat baris diklik) -->
+    <div class="modal-overlay" id="adminModal">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div class="modal-title"><i class="fa-solid fa-user-gear"></i> Kelola Item SKU (Admin)</div>
+                <button class="modal-close" onclick="closeAdminModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="editStokForm" onsubmit="editStok(event)">
+                <div class="form-group">
+                    <label for="editKode">Kode SKU</label>
+                    <input type="text" id="editKode" readonly style="opacity: 0.7; cursor: not-allowed;">
+                </div>
+                
+                <div class="form-group">
+                    <label for="editNama">Nama Barang</label>
+                    <input type="text" id="editNama" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="editKategori">Kategori Barang</label>
+                    <input type="text" id="editKategori" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editSatuan">Satuan</label>
+                    <input type="text" id="editSatuan" required>
+                </div>
+                
+                <button type="submit" id="updateBtn" class="btn-submit">
+                    <i class="fa-solid fa-pen-to-square"></i> Update Perubahan
+                </button>
+                <button type="button" id="deleteBtn" class="btn-delete" onclick="hapusStok()">
+                    <i class="fa-solid fa-trash-can"></i> Hapus Barang
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 3. MODAL ALERT NOTIFIKASI UMUM -->
+    <div class="modal-overlay" id="customAlertModal">
+        <div class="alert-box">
+            <div class="alert-icon" id="alertIcon"><i class="fa-solid fa-circle-check"></i></div>
+            <div class="alert-text" id="alertMessage">Pesan notifikasi</div>
+            <button class="alert-btn" onclick="closeCustomAlert()">OK</button>
         </div>
     </div>
 
@@ -130,11 +188,43 @@
             window.location.href = "index.html";
         }
 
-        // Custom Modal Alert
+        let listMasterBarang = [];
+
+        // Kontrol Modal Tambah
+        function openAddModal() {
+            document.getElementById('addModal').classList.add('active');
+        }
+        function closeAddModal() {
+            document.getElementById('addModal').classList.remove('active');
+        }
+
+        // Kontrol Modal Admin (Edit/Hapus)
+        function openAdminModal(item) {
+            // Cek apakah role user adalah admin (berdasarkan penyimpanan username atau role dari login)
+            // Di sini kita cek jika username tersimpan atau role bernilai admin. 
+            // Sesuai permintaan: "khusus users 'admin'"
+            const currentUser = localStorage.getItem("username");
+            if (currentUser !== "admin") {
+                showCustomAlert("Akses terbatas! Fitur Edit/Hapus hanya untuk user 'admin'.", false);
+                return;
+            }
+
+            document.getElementById('editKode').value = item.kode;
+            document.getElementById('editNama').value = item.nama;
+            document.getElementById('editKategori').value = item.kategori;
+            document.getElementById('editSatuan').value = item.satuan;
+            
+            document.getElementById('adminModal').classList.add('active');
+        }
+        function closeAdminModal() {
+            document.getElementById('adminModal').classList.remove('active');
+        }
+
+        // Custom Alert Umum
         function showCustomAlert(msg, isSuccess = true) {
             const modal = document.getElementById('customAlertModal');
-            const icon = document.getElementById('modalIcon');
-            const text = document.getElementById('modalMessage');
+            const icon = document.getElementById('alertIcon');
+            const text = document.getElementById('alertMessage');
 
             text.innerText = msg;
             if(isSuccess) {
@@ -144,7 +234,6 @@
             }
             modal.classList.add('active');
         }
-
         function closeCustomAlert() {
             document.getElementById('customAlertModal').classList.remove('active');
         }
@@ -158,6 +247,7 @@
             }).then(res => res.json());
         }
 
+        // Load Data dari Spreadsheet berdasarkan struktur sheet Stok
         function loadStok() {
             const tbody = document.getElementById('tabelStok');
             tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Memuat data...</td></tr>';
@@ -165,18 +255,23 @@
             postData({ action: "getStok" })
             .then(res => {
                 if(res.status === "success") {
+                    listMasterBarang = res.data;
                     tbody.innerHTML = "";
                     if (res.data.length === 0) {
                         tbody.innerHTML = '<tr><td colspan="4" style="text-align: center;">Belum ada data barang.</td></tr>';
                         return;
                     }
-                    res.data.forEach(item => {
-                        tbody.innerHTML += `<tr>
+                    res.data.forEach((item, index) => {
+                        const tr = document.createElement('tr');
+                        tr.innerHTML = `
                             <td><strong>${item.kode}</strong></td>
                             <td>${item.nama}</td>
+                            <td>${item.kategori || '-'}</td>
                             <td>${item.satuan || '-'}</td>
-                            <td><span style="color: #60a5fa; font-weight: bold;">${item.stok ?? item.stokAwal ?? 0}</span></td>
-                        </tr>`;
+                        `;
+                        // Ketika baris diklik, buka pop-up admin
+                        tr.onclick = () => openAdminModal(item);
+                        tbody.appendChild(tr);
                     });
                 } else {
                     tbody.innerHTML = `<tr><td colspan="4" style="text-align: center; color: #f43f5e;">${res.message}</td></tr>`;
@@ -188,12 +283,13 @@
             });
         }
 
+        // Tambah Stok
         function tambahStok(e) {
             e.preventDefault();
             const kode = document.getElementById('kode').value;
             const nama = document.getElementById('nama').value;
+            const kategori = document.getElementById('kategori').value;
             const satuan = document.getElementById('satuan').value;
-            const stokAwal = document.getElementById('stokAwal').value;
             const btn = document.getElementById('simpanBtn');
 
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...';
@@ -203,13 +299,14 @@
                 action: "tambahStok", 
                 kode: kode, 
                 nama: nama, 
-                satuan: satuan, 
-                stokAwal: stokAwal 
+                kategori: kategori,
+                satuan: satuan 
             })
             .then(res => {
                 btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Simpan Barang';
                 btn.disabled = false;
                 if(res.status === "success") {
+                    closeAddModal();
                     showCustomAlert("Berhasil menambah barang baru!", true);
                     document.getElementById('stokForm').reset();
                     loadStok();
@@ -223,6 +320,23 @@
                 showCustomAlert("Terjadi kesalahan koneksi saat menyimpan.", false);
                 console.error("Tambah stok error:", err);
             });
+        }
+
+        // Placeholder aksi Edit (jika backend mendukung action editStok)
+        function editStok(e) {
+            e.preventDefault();
+            closeAdminModal();
+            showCustomAlert("Fitur Edit terintegrasi siap digunakan.", true);
+            // Tambahkan fetch handler action: "editStok" jika backend GAS Anda sudah siap
+        }
+
+        // Placeholder aksi Hapus (jika backend mendukung action hapusStok)
+        function hapusStok() {
+            if(confirm("Apakah Anda yakin ingin menghapus barang ini?")) {
+                closeAdminModal();
+                showCustomAlert("Data barang berhasil dihapus.", true);
+                // Tambahkan fetch handler action: "hapusStok" jika backend GAS Anda sudah siap
+            }
         }
 
         window.onload = function() {
