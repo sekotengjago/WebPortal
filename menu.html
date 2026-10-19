@@ -2,28 +2,82 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Menu Utama - Aplikasi Stok</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        * { box-sizing: border-box; }
-        body { font-family: Arial, sans-serif; background: #f4f4f9; margin: 0; padding: 20px; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .card { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
-        .btn-menu { display: block; width: 100%; padding: 12px; margin: 12px 0; background: #007BFF; color: white; border: none; border-radius: 4px; font-weight: bold; font-size: 16px; cursor: pointer; text-decoration: none; }
-        .btn-menu:hover { background: #0056b3; }
-        .btn-logout { background: #dc3545; }
-        .btn-logout:hover { background: #c82333; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+        body { background: #0f0c1b; color: #ffffff; min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 16px; overflow-x: hidden; position: relative; }
+        
+        /* Shape Background Accents */
+        .bg-glow-1 { position: absolute; width: 280px; height: 280px; background: radial-gradient(circle, rgba(236,72,153,0.3) 0%, rgba(0,0,0,0) 70%); top: -40px; left: -40px; border-radius: 50%; pointer-events: none; }
+        .bg-glow-2 { position: absolute; width: 300px; height: 300px; background: radial-gradient(circle, rgba(99,102,241,0.25) 0%, rgba(0,0,0,0) 70%); bottom: -50px; right: -50px; border-radius: 50%; pointer-events: none; }
+
+        .app-container { width: 100%; max-width: 420px; z-index: 1; }
+        
+        /* Banner Card */
+        .header-card { background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%); border-radius: 24px; padding: 24px; margin-bottom: 24px; box-shadow: 0 10px 25px rgba(236, 72, 153, 0.25); }
+        .user-welcome { font-size: 13px; color: rgba(255, 255, 255, 0.85); text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
+        .main-title { font-size: 26px; font-weight: 800; color: #fff; margin-top: 4px; }
+
+        .menu-label { font-size: 14px; font-weight: 600; color: #a5a6f6; margin-bottom: 14px; margin-left: 4px; display: block; }
+
+        /* Grid Category Cards - Seperti di Gambar Sampel */
+        .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
+        
+        .menu-card { background: rgba(26, 21, 48, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 20px 16px; text-decoration: none; color: #fff; display: flex; flex-direction: column; align-items: center; text-align: center; transition: all 0.2s ease; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+        .menu-card:active { transform: scale(0.96); background: rgba(35, 29, 64, 0.9); }
+
+        .icon-circle { width: 56px; height: 56px; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-size: 22px; margin-bottom: 12px; }
+        
+        /* Gradient Icons */
+        .icon-sku { background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%); color: #fff; box-shadow: 0 6px 15px rgba(6, 182, 212, 0.3); }
+        .icon-masuk { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3); }
+
+        .card-title { font-size: 14px; font-weight: 700; color: #ffffff; }
+        .card-sub { font-size: 11px; color: #94a3b8; margin-top: 4px; }
+
+        /* Button Logout */
+        .btn-logout { width: 100%; padding: 14px; background: rgba(244, 63, 94, 0.15); border: 1px solid rgba(244, 63, 94, 0.3); color: #fb7185; border-radius: 16px; font-size: 15px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: all 0.2s ease; }
+        .btn-logout:active { background: rgba(244, 63, 94, 0.3); transform: scale(0.98); }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <h2>Menu Utama</h2>
-        <p style="color: #666; margin-bottom: 20px;">Silakan pilih menu di bawah ini:</p>
-        
-        <a href="stock.html" class="btn-menu">📁 List SKU (Master Barang)</a>
-        <a href="stokMasuk.html" class="btn-menu" style="background: #28a745;">📥 Lembar Barang Masuk</a>
-        
-        <button onclick="handleLogout()" class="btn-menu btn-logout" style="margin-top: 30px;">Logout</button>
+    <div class="bg-glow-1"></div>
+    <div class="bg-glow-2"></div>
+
+    <div class="app-container">
+        <!-- Top Card -->
+        <div class="header-card">
+            <div class="user-welcome">Selamat Datang</div>
+            <div class="main-title">Menu Utama</div>
+        </div>
+
+        <span class="menu-label">Pilih Akses Menu</span>
+
+        <!-- Grid Menu Berwarna -->
+        <div class="menu-grid">
+            <a href="stock.html" class="menu-card">
+                <div class="icon-circle icon-sku">
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                </div>
+                <div class="card-title">List SKU</div>
+                <div class="card-sub">Master Barang</div>
+            </a>
+
+            <a href="stokMasuk.html" class="menu-card">
+                <div class="icon-circle icon-masuk">
+                    <i class="fa-solid fa-file-circle-plus"></i>
+                </div>
+                <div class="card-title">Barang Masuk</div>
+                <div class="card-sub">Lembar Catatan</div>
+            </a>
+        </div>
+
+        <button onclick="handleLogout()" class="btn-logout">
+            <i class="fa-solid fa-right-from-bracket"></i> Keluar Aplikasi
+        </button>
     </div>
 
     <script>
