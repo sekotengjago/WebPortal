@@ -22,7 +22,7 @@
 
         .menu-label { font-size: 14px; font-weight: 600; color: #a5a6f6; margin-bottom: 14px; margin-left: 4px; display: block; }
 
-        /* Grid Category Cards - Seperti di Gambar Sampel */
+        /* Grid Category Cards */
         .menu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 24px; }
         
         .menu-card { background: rgba(26, 21, 48, 0.8); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 20px; padding: 20px 16px; text-decoration: none; color: #fff; display: flex; flex-direction: column; align-items: center; text-align: center; transition: all 0.2s ease; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
@@ -33,6 +33,7 @@
         /* Gradient Icons */
         .icon-sku { background: linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%); color: #fff; box-shadow: 0 6px 15px rgba(6, 182, 212, 0.3); }
         .icon-masuk { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: #fff; box-shadow: 0 6px 15px rgba(16, 185, 129, 0.3); }
+        .icon-keluar { background: linear-gradient(135deg, #f43f5e 0%, #e11d48 100%); color: #fff; box-shadow: 0 6px 15px rgba(244, 63, 94, 0.3); }
 
         .card-title { font-size: 14px; font-weight: 700; color: #ffffff; }
         .card-sub { font-size: 11px; color: #94a3b8; margin-top: 4px; }
@@ -72,6 +73,14 @@
                 </div>
                 <div class="card-title">Barang Masuk</div>
                 <div class="card-sub">Lembar Catatan</div>
+            </a>
+
+            <a href="stockKeluar.html" class="menu-card" style="grid-column: span 2;">
+                <div class="icon-circle icon-keluar">
+                    <i class="fa-solid fa-file-circle-minus"></i>
+                </div>
+                <div class="card-title">Barang Keluar</div>
+                <div class="card-sub">Lembar Pencatatan Stok Keluar</div>
             </a>
         </div>
 
